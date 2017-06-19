@@ -719,7 +719,11 @@ def main():
                 been_updated = True
             name_change, key_list, user_changed, new_key = update_user(
                 module, iam, name, new_name, new_path, key_state, key_count, key_ids, password, been_updated)
-            user_meta = dict(access_keys=new_key)
+            if new_key:
+                user_meta = dict(access_keys=new_key)
+            else:
+                user_meta = {'access_keys': [{'access_key_id': key, 'status': value} for key, value in key_list.items()]}
+
             if name_change and new_name:
                 orig_name = name
                 name = new_name
